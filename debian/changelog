@@ -1,4 +1,4 @@
-xbl (1.1.6-1~focal1) focal; urgency=low
+xbl (1.1.6-1~groovy1) groovy; urgency=low
 
   * Rebuilt from latest upstream and a fresh debian directory, incorporating parts of the old Debian package.
 

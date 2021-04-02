@@ -1,4 +1,4 @@
-xbl (1.1.6-1~hirsute2) hirsute; urgency=medium
+xbl (1.1.6-1~hirsute2) hirsute; urgency=low
 
   * Add link to VCS. Add patch to set a WM class on windows so that they can have dock icons.
 

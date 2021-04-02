@@ -67,3 +67,26 @@ Index: xbl-1.1.6/initwin.c
    /*
      { int j ; for(j=0;j<i;j++) printf("%s ",argv[j]) ; printf("\n") ; }
    */
+Index: xbl-1.1.6/score.c
+===================================================================
+--- xbl-1.1.6.orig/score.c
++++ xbl-1.1.6/score.c
+@@ -403,6 +403,7 @@ Window scorewin(Display *d, int s, Windo
+   int x,y ;
+   unsigned int dx,dy,odx,ody ;
+   XSizeHints sh ;
++  XClassHint ch;
+ 
+   wa.event_mask = ExposureMask|StructureNotifyMask ;
+   wa.background_pixel = b ;
+@@ -451,6 +452,10 @@ Window scorewin(Display *d, int s, Windo
+   sh.y = y ;
+   XSetWMNormalHints( d,scores,&sh ) ;
+ 
++  ch.res_name = "XBlockOut";
++  ch.res_class = "xbl";
++  XSetClassHint(d, scores, &ch);
++
+   return(scores) ;
+ }
+ 

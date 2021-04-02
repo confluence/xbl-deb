@@ -1,0 +1,230 @@
+dnl ATTENTION : on HP9000/300 HPUX7.0 the configure script must be hand patched
+dnl It's a /bin/sh bug who can't understand : cat <<EOF > config.status
+
+AC_INIT(Makefile.in)
+AC_PROG_CC
+
+MANPATH=""
+
+dnl
+dnl
+dnl Look for include and library place
+dnl This search is unecessary if imake or xmkmf exists
+dnl
+dnl
+test -d [/usr/local/include/X11] && CFLA="$CFLA -I[/usr/local/include]"
+test -d [/usr/openwin/include/X11] && CFLA="$CFLA -I[/usr/openwin/include]"
+test -d [/usr/local/X11/include] && CFLA="$CFLA -I[/usr/local/X11/include]"
+test -d [/usr/local/X11R3/include] && CFLA="$CFLA -I[/usr/local/X11R3/include]"
+test -d [/usr/local/X11R4/include] && CFLA="$CFLA -I[/usr/local/X11R4/include]"
+test -d [/usr/local/X11R5/include] && CFLA="$CFLA -I[/usr/local/X11R5/include]"
+test -d [/usr/local/X11R6/include] && CFLA="$CFLA -I[/usr/local/X11R6/include]"
+test -d [/usr/local/X11R7/include] && CFLA="$CFLA -I[/usr/local/X11R7/include]"
+test -f [/usr/local/lib/libX11.a] && LI="/usr/local/lib/libX11.a"
+test -f [/usr/lib/libX11.a] && LI="-lX11"
+test -f [/usr/openwin/lib/libX11.a] && LI="/usr/openwin/lib/libX11.a"
+test -f [/usr/local/X11R3/lib/libX11.a] && LI="/usr/local/X11R3/lib/libX11.a"
+test -f [/usr/local/X11R4/lib/libX11.a] && LI="/usr/local/X11R4/lib/libX11.a"
+test -f [/usr/local/X11R5/lib/libX11.a] && LI="/usr/local/X11R5/lib/libX11.a"
+test -f [/usr/local/X11R6/lib/libX11.a] && LI="/usr/local/X11R6/lib/libX11.a"
+test -f [/usr/local/X11R7/lib/libX11.a] && LI="/usr/local/X11R7/lib/libX11.a"
+dnl
+dnl Create an Imakefile which print variable values 
+dnl
+cat <<'EOF' >Imakefile
+ALL:
+	@echo CFLA=\"$(CFLAGS)\"
+	@echo LI=\"$(XLIB) $(LDLI)\"
+	@echo XAPPLOADDIR=\"RESOURCEDIR=$(XAPPLOADDIR)\"
+	@echo BINDIR=\"BINDIR=$(BINDIR)\"
+	@echo SCOREDIR=\"SCOREDIR=$(LIBDIR)/xbl\"
+	@echo CP=\"CP=$(CP)\"
+	@echo RM=\"RM=$(RM)\"
+	@echo LN=\"LN=$(LN)\"
+	@echo COMPRESS=\"COMPRESS=$(COMPRESS)\"
+	@echo MANPATH=\"MANPATH=$(MANPATH)\"
+	@echo CC=\"$(CC)\"
+	@echo LDOPTIONS=\"$(LDOPTIONS)\"
+	@echo LINT=\"LINT=$(LINT)\"
+	@echo LINTFLAGS=\"LINTFLAGS=$(LINTFLAGS)\"
+EOF
+dnl
+dnl
+dnl Try to run xmkmf and imake
+dnl
+dnl
+AC_PROGRAM_CHECK(XMKMF,xmkmf,xmkmf)
+test "" = "$XMKMF" && XMKMF=false
+test 0 -eq `grep -c "^USE_XMKMF=YES" Makefile.in` && XMKMF=false
+
+AC_PROGRAM_CHECK(IMAKE,imake,imake)
+test "" = "$IMAKE" && IMAKE=false
+IMAKE_OPTIONS=`grep "^IMAKE_OPTIONS=" Makefile.in | sed "s/IMAKE_OPTIONS=//"`
+test "" = "$IMAKE_OPTIONS" && IMAKE=false
+
+if $XMKMF 2>/dev/null >/dev/null
+   then
+	 echo "I will use informations from : xmkmf"
+   else 
+        if $IMAKE $IMAKE_OPTIONS 2>/dev/null >/dev/null
+		then
+		echo "I will use informations from : imake $IMAKE_OPTIONS"
+	else
+		dnl
+		dnl Create an Makefile which print variable values 
+		dnl This Makefile is used if nor imake and xmkmf exits
+		dnl
+		cat <<EOF >Makefile
+ALL:
+	@echo CFLA=\"$CFLAGS\"
+	@echo LI=\"$LIBS\"
+EOF
+	fi
+fi 2>/dev/null
+dnl
+dnl
+dnl Eval to take variables values
+dnl
+dnl
+
+eval `make ALL`
+rm Makefile Imakefile
+
+AC_SUBST(CC)
+AC_SUBST(LDOPTIONS)
+AC_SUBST(CP)
+AC_SUBST(RM)
+AC_SUBST(LN)
+AC_SUBST(LINT)
+AC_SUBST(LINTFLAGS)
+AC_SUBST(COMPRESS)
+AC_SUBST(MANPATH)
+AC_SUBST(XAPPLOADDIR)
+AC_SUBST(BINDIR)
+AC_SUBST(SCOREDIR)
+AC_SUBST(CFLA)
+dnl
+dnl
+dnl Continue tests
+dnl
+dnl
+AC_MODE_T
+AC_SIZE_T
+AC_STDC_HEADERS
+AC_HAVE_HEADERS(stdlib.h)
+AC_HAVE_HEADERS(unistd.h)
+AC_HAVE_HEADERS(string.h)
+AC_HAVE_HEADERS(fcntl.h)
+AC_HAVE_HEADERS(signal.h)
+AC_HAVE_HEADERS(sys/time.h)
+AC_HAVE_HEADERS(time.h)
+AC_HAVE_HEADERS(sys/stat.h)
+AC_HAVE_HEADERS(sys/select.h)
+AC_HAVE_HEADERS(malloc.h)
+test -f /usr/lib/libmalloc.a && LI="$LI -lmalloc"
+dnl AC_TRY_COMPILE("Prototypes",,extern int y(int z);y(5);}y(z)int z;{,CFLA="$CFLA -DHAVE_PROTOTYPES")
+
+
+AC_TEST_PROGRAM([
+#include <sys/time.h>
+int main()
+{
+fd_set i,j,k ;
+long t ;
+struct  timeval timeout ;
+t=time(0L);
+timeout.tv_sec = 2 ;
+timeout.tv_usec = 0 ; 
+FD_ZERO(&i) ;
+FD_ZERO(&j) ;
+FD_ZERO(&k) ;
+FD_SET(0, &i) ;
+select(1,&i,&j,&k,&timeout);
+return( time(0L)-t ) ;
+}
+], CFLA="$CFLA -DBAD_SELECT" ; echo "Bad select"
+,CFLA="$CFLA -DGOOD_SELECT" ; echo "Good select"
+, CFLA="$CFLA -DBAD_SELECT" ; echo "Good select")
+
+
+AC_TEST_PROGRAM([
+#include <signal.h>
+#include <stdio.h>
+#include <sys/time.h>
+
+volatile int c = 0 ;
+void fct(i) int i ; { c++ ; signal(SIGALRM, fct) ; }
+
+int main()
+{
+  struct  itimerval itv ;
+  struct timezone tz ;
+  struct timeval tv, tv2 ;
+  int i ;
+
+  signal(SIGALRM, fct) ;
+  gettimeofday(&tv, &tz) ;
+
+  itv.it_interval.tv_sec = 0 ;
+  itv.it_interval.tv_usec = 1000000/25 ;
+  itv.it_value = itv.it_interval ;
+  setitimer(ITIMER_REAL, &itv, NULL) ;
+
+  do
+    {
+      gettimeofday(&tv2, &tz) ;
+
+      i =  (tv2.tv_sec - tv.tv_sec)*1000000 + tv2.tv_usec - tv.tv_usec ;
+    }
+  while ( c!=25 && i < 1000000+itv.it_interval.tv_usec ) ;
+
+  signal(SIGALRM, SIG_IGN) ;
+
+  if ( c != 25 )
+      {
+	printf("Alarm=1/25s %d call in 1 seconds !\n", c) ;
+	return(1) ;
+      }
+  if ( i < 1000000-itv.it_interval.tv_usec )
+      {
+	printf("Alarm=1/25s 25 call in %d micro-seconds !\n", i) ;
+	return(1) ;
+      }
+
+  sleep(1) ;
+
+  if ( c != 25 )
+      {
+	printf("Alarm called after ignoring it!\n") ;
+	return(1) ;
+      }
+
+  return(0) ;
+}
+],CFLA="$CFLA -DALARM_WORK" ; echo "Good alarm",
+CFLA="$CFLA -DALARM_DONT_WORK" ; echo "Bad alarm",
+CFLA="$CFLA -DALARM_DONT_WORK" ; echo "Bad alarm"
+)
+
+
+# This line extract the GID of "games" from "/etc/group"
+GAMES_GID=`grep "^games:" /etc/group | cut -d":" -f3`
+GROUP_GID=""
+AC_SUBST(GROUP_GID)
+test "" != "$GAMES_GID" && GROUP_GID="GROUP_GID=$GAMES_GID"
+
+
+dnl I must indicate the LDOPTIONS in LIBS before test FUNCTION
+AC_HAVE_FUNCS(usleep,,)
+LIBS="$LDOPTIONS $LI"
+AC_HAVE_FUNCS(XGetGCValues,,)
+LIBS="$LI"
+
+dnl Next line is complex because autoconf does not like ","
+dnl And on HP some option contains ","
+LINTFLAGS=`echo "$LINTFLAGS" | sed 's/,/\\\,/g'`
+CFLA=`echo "$CFLA" | sed 's/,/\\\,/g'`
+LDOPTIONS=`echo "$LDOPTIONS" | sed 's/,/\\\,/g'`
+
+
+AC_OUTPUT(Makefile)

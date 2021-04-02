@@ -1,0 +1,699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+<title>XBlockOut manual (xbl 1.1.6)</title></head>
+<body>
+<h1>XBlockOut manual (<tt>xbl 1.1.6</tt>)</h1>
+
+<h2>X Window block dropping game in 3 Dimension</h2>
+
+<tt>Xbl</tt>
+is a game involving dropping blocks like
+<tt>Xtetris</tt>
+but in 3 dimensions.
+As they drop you can move them with numeric key pad (if you have), cursor key
+or rotate other 3 axis in 2 directions (6 other keys).
+Space key for dropping quickly and 'p' key for pause and '0' to drop
+the block of 1 level.
+All the possible keys are displayed in menu window.
+ <p>
+Points are scored for each block that comes to rest on the gradually
+building up pile of blocks.
+When the pile reaches the top of the
+screen and no further blocks can be dropped the game ends. When a
+stage of blocks across the 3D matrix is completely filled, that
+stage is removed and all the blocks above are dropped down.
+As more stages are deleted the blocks fall faster.
+ <p>
+There is one high score table by size of matrix and pieces types.
+
+<ul>
+<li> The <a href="#CLO">command line options</a>.
+	They are of 3 types:
+	<ul>
+	<li> The setting can be made only on <a href="#CL">command line</a>.
+	<li> The setting can be changed 
+		<a href="#IBG">interactivly between games</a>.
+	<li> The setting can be changed <a href="#DG">while playing</a>.
+	</ul>
+<li> The <a href="#FIL">related files</a>.
+<li> The <a href="#ENV">environment variables</a>.
+<li> How the animation is displayed:
+	the <a href="#BUF">buffering methods</a>.
+<li> The <a href="#BUG">known bugs</a>.
+<li> <tt>Xbl</tt> <a href="#STA">Speed statistics</a>
+	<ul>
+	<li> <a href="#TAB">Table</a> of results.
+	<li> List of <a href="#WOR">tested workstations</a>.
+	<li> List of <a href="#XTE">tested X terminals</a>.
+	</ul>
+<li> The <a href="#TOD">TODO</a> list.
+<li> The general README with some 
+	<a href="http://www710.univ-lyon1.fr/~exco/XBL/xbl-1.1.3/xbl.html">game images</a>.
+<li> <a href="#CHA">Changes</a>
+	 from version 0.0 to the last one.
+<li> Retrieve the latest C sources (tar'ed and compressed)
+     in the directory 
+     <a href="http://www710.univ-lyon1.fr/~exco/XBL/">xbl</a>
+<li> The sources are copyrighted with GPL (GNU Public Licence)
+<li> <a href="#THA">Thanks</a>.
+</ul>
+
+<h2><a name="CLO">Command line options</a></h2>
+
+<blockquote>
+
+<h3><a name="CL">Setting only on command line</a></h3>
+
+<blockquote>
+<pre>-display host:0
+             <i>Gives the display name.</i>
+-help	     
+             <i>Displays the options, possible values</i>
+             <i>and current values.</i>
+-verbose     
+             <i>Displays various things for debugging.</i>
+-colormap    
+             <i>Creates its own colormap even if unnecessary.</i>
+-visual	     
+             <i>On screen with multiple visual,</i>
+             <i>it search the best one to use.</i>
+             <i>In this case it doesn't use the default visual.</i>
+-bw	     
+             <i>Displays in black &amp; white even on color display.</i>
+-buffer 0...5
+             <i>Chooses the buffering method for animation.</i>
+             <i>Each method uses different resources.</i>
+             <i>Speed of buffering method is hardware dependent.</i>
+             <i>Perfect methods are: 2,1,3, choose the fast one.</i>
+-font font_name
+             <i>Chooses font for menus, score window...</i>
+-bigfont font_name
+             <i>Chooses a big font for menu:the score &amp; high score</i>
+-buttonheight -1...16
+             <i>The height of 3D buttons.</i>
+             <i>If your display is slow use small button.</i>
+             <i>The -1 choice is half the height of the font.</i>
+-color 0...6
+             <i>Background color for menu window.</i>
+             <i>0:Black 1:Red 2:Green 3:Yellow</i>
+             <i>4:Blue 5:Magenta 6:Cyan</i>
+-sync
+             <i>Uses X Synchronise. Only for debugging.</i>
+-clearline 0...1
+             <i>0: clears line with rectangle filling.</i>
+             <i>1: clears line with a black line.</i>
+             <i>It's useful with some X servers that don't draw</i>
+             <i>the same segment with the same pixels.</i>
+             <i>Another method to avoid this problem is to</i>
+             <i>use a linewidth equal to 1,</i>
+             <i>though in this case drawing is slower.</i>
+-linewidth 0...16
+             <i>Thickness of the moving block lines.</i>
+-time_to_demo 1...999
+             <i>Number of seconds between</i>
+             <i>automatic demonstration (show).</i>
+-speedtest
+             <i>This option helps you to</i>
+             <i>find the fastest buffering mode.</i>
+-stat
+             <i>Statistics on launched blocks,</i>
+             <i>they are displayed at the end of the game.</i>
+-keytable keys_list
+	     <i>A 19 characters list, game keys.</i>
+	     <i>8 translations keys (D=Down L=Left R=Right U=Up):</i>
+	     <i>             DL,L,UL,U,UR,R,DR,D</i>
+	     <i>Rotations:   RX+,RX-,RY+,RY-,RZ+,RZ-</i>
+	     <i>Others:      LaunchBloc CancelGame SuspendGame QuitGame Drop1Level</i>
+	     <i>Don't forgot ' if there are special characters.</i>
+-fps 1...100
+             <i>Number of frames by second</i>
+             <i>If it is set too high, the display might be jumpy.</i>
+             <i>If set to 0, the game runs at maximum speed.</i>
+</pre>
+</blockquote>
+
+
+
+<h3><a name="IBG">Setting interactivly between games</a></h3>
+
+
+<blockquote>
+<pre>-x 3...8 -y 3...8 -z 6...18
+	<i>World size: width, height, depth.</i>
+-land 0...2
+	<i>Some predefined world size</i>
+	<i>	0: Small land (3x3x15)</i>
+	<i>	1: Big land (5x5x10)</i>
+	<i>	2: User land (as defined by options)</i>
+-level 0...10
+	<i>Level 0 is slow, 10 is unplayable.</i>
+	<i>This option chooses the starting game level.</i>
+	<i>Level game increases during game.</i>
+-bloctype 0...2
+	<i>The possible piece set</i>
+	<i>	0: Only flat pieces.</i>
+	<i>	1: Some 3D pieces.</i>
+	<i>	2: All possible pieces with less or equal than 5 cubes.</i>
+</pre>
+</blockquote>
+
+<h3><a name="DG">Setting while playing</a></h3>
+
+The following options can be modified even in the middle of a game.
+
+<p>
+<blockquote>
+<pre>-keyboard 0...5
+	<i>This switch chooses keyboard type:</i>
+	<i>	0: Use key table, given by <tt>-keytable</tt></i>
+	<i>	1: AZERTY|</i>
+	<i>	2: QWERTY|</i>
+	<i>	3: AZERTY-</i>
+	<i>	4: QWERTY-</i>
+	<i>	5: SPATIAL is the set of keys of the <tt>spatial</tt> Tetris</i>
+-zoo
+	<i>Displays the zoo (all possible pieces) when game starts.</i>
+-score
+	<i>Displays the score table when game starts.</i>
+-draw 0 or 2
+	<i>Draw mode.</i>
+	<i>	0: for wire frame piece</i>
+	<i>	2: for transparent piece.</i>
+	<i>On slow host, 0 is necessary.</i>
+-smooth
+	<i>Starts game with smooth drawing.</i>
+-training
+	<i>In this mode, pieces don't fall.</i>
+	<i>By the way scores are not saved.</i>
+-shownext
+	<i>Next piece is shown.</i>
+	<i>By the way score are multiplied by 0.7</i>
+-eyedistance
+        <i>Distance between the eyes. Use 0 to disable stereo vision</i>
+</pre>
+
+</blockquote>
+</blockquote>
+
+<h2><a name="FIL">Related file</a></h2>
+
+<blockquote>
+<pre>.../X11R6/lib/X11/xbl
+	<i>Directory which contains the score tables, HTML documentation and</i>
+	<i>COPYING file (FSF GPL)</i>
+.../X11R6/lib/X11/app-defaults/Xbl
+	<i>Defaults for Xbl, this file only contains</i>
+	<i>the option line for Xbl.</i>
+	<i><tt>xbl*args: -x 5 -y 5 -z 10 -level 0 -bloctype 2 -land 0 -draw 0 -clearline 0 \
+        -buttonheight -1 -buffer 2 -keyboard 4 -keytable "14789632azqswx ^]p^C0"</tt></i>
+.../X11R6/bin/xbl
+	<i>The binary</i>
+</pre>
+</blockquote>
+
+
+<h2><a name="ENV">Environment variables</a></h2>
+
+<blockquote>
+<pre>XBLOPTIONS
+	<i><tt>Xbl</tt> will search its options in this variable, you can put:</i>
+	<i>	<tt>XBLOPTIONS='-smooth -draw 0' export XBLOPTIONS</tt></i>
+	<i>in your <tt>.profile</tt> or <tt>.login</tt> file.</i>
+</pre>
+</blockquote>
+
+
+<h2><a name="BUF">Buffering methods</a></h2>
+
+<blockquote>
+Animation needs various resources.
+<tt>Xbl</tt> offers 6 different buffering methods.
+Each of these methods uses different resource or has ``bugs''.
+Best methods use a huge amount of resources.
+The fastest method is hardware dependent.
+Try buffering methods 2, 1 and 3. They gave the best results.
+<p>
+Algorithms are :
+<pre class="listing">buffer=0 : For each frame redraw the background and the piece.
+	   NEEDS : Nothing
+	   BUGS  : Everything flicks and it's slow.
+buffer=1 : When background changes it's redrawn in a buffer,
+	   and this buffer goes to screen.
+	   For each frame :
+		clears buffer
+		draws piece in buffer
+		copies buffer on screen on high plane
+	   NEEDS : 1 buffer, 1 colormap, 1 plane for moving piece
+	   BUGS  :
+buffer=2 : Draws background in bufferA
+	   for each frame :
+		copies bufferA in bufferB
+		draws piece in bufferB
+		copies bufferB on screen
+	   NEEDS : 2 buffers
+	   BUGS  :
+buffer=3 : When background changes it's redrawn on screen
+	   For each frame
+		clears planeA
+		draws piece in planeA
+		switches planeA and planeB by switching 2 colormaps
+	   NEEDS : 2 colormaps, 2 planes for moving piece
+	   BUGS  : You see the background redrawing on change,
+		   possible problems with colormap switching
+buffer=4 : When background changes it's redrawn on screen
+	   For each frame
+		clears plane
+		draws piece on plane
+	   NEEDS : 1 colormap, 1 plane for moving piece
+	   BUGS  : You see the background redrawing on change,
+		   the moving piece flicks.
+buffer=5 : When background changes it's redrawn in buffer,
+	   and buffer goes to screen.
+	   For each frame
+		draws piece on screen
+		copies buffer on screen
+	   NEEDS : 1 buffer
+	   BUGS  : The moving piece flicks.
+</pre>
+
+If you choose <tt>-buffer -1</tt> option, program will use
+buffering method 3, 2 or 1 depending on colormap capacity.
+			
+<p>
+
+This is a comparison of the buffering modes:
+(most of the functions are in ``draw.c'')
+
+<pre class="listing"> +------------+------------+------------+------------+------------+------------+
+ | buffering=0| buffering=1| buffering=2| buffering=3| buffering=4| buffering=5|
+ +------------+------------+------------+------------+------------+------------+
+(NewWorld)
+		(drawback) in all buffer mode
+(Expose)
+ +------------+------------+------------+------------+------------+------------+
+ |  DrawBack  |  DrawBack  |UpdateScreen|  DrawBack  |  DrawBack  |  DrawBack  |
+ +------------+------------+------------+------------+------------+------------+
+(DrawBack)
+ +------------+------------+------------+------------+------------+------------+
+ |XClearWindow|XFillRectang|XFillRectang|XClearWindow|XClearWindow|XFillRectang|
+ |DrawRealBack|DrawRealBack|DrawRealBack|DrawRealBack|DrawRealBack|DrawRealBack|
+ |            | XCopyArea  | UpdateWork |            | XCopyArea  |            |
+ |            |XFillRectang|UpdateScreen|            |            |            |
+ +------------+------------+------------+------------+------------+------------+
+(UpdateWork)
+ +------------+------------+------------+------------+------------+------------+
+ |            |ClearLineBlo|ClearLineBlo|ClearLineBlo|ClearLineBlo|ClearLineBlo|
+ |            |     or     |     or     |     or     |     or     |     or     |
+ |            |XFillRectang| XCopyArea  |XFillRectang|XFillRectang|  XCopyArea |
+ +------------+------------+------------+------------+------------+------------+
+(UpdateScreen)
+ +------------+------------+------------+------------+------------+------------+
+ |            | XCopyArea  | XCopyArea  | Switch     |            |            |
+ |            |            |            | Colormaps  |            |            |
+ +------------+------------+------------+------------+------------+------------+
+(DisplayMovingBloc)
+ +------------+------------+------------+------------+------------+------------+
+ |  DrawBack  | UpdateWork | UpdateWork | UpdateWork | UpdateWork | UpdateWork |
+ |  DrawPiece | DrawPiece  | DrawPiece  | DrawPiece  | DrawPiece  | DrawPiece  |
+ |            |UpdateScreen|UpdateScreen|UpdateScreen|UpdateScreen|UpdateScreen|
+ +------------+------------+------------+------------+------------+------------+
+</pre>
+
+</blockquote>
+
+
+<h2><a name="BUG">Some <tt>xbl</tt> ``bugs''</a></h2>
+
+<blockquote>
+
+If you have display problems, use <tt>-buffer 2</tt> option,
+it works on any screen.
+<p>
+<ul type="circle">
+
+<li>
+SOUND isn't correct on some X server, no possible correction.
+On Sun, DECstation, Tektro, ... sound tonality doesn't change.
+On xfree386, sound duration isn't taken into account.
+
+<li>
+FLICKING DISPLAY on some X server that doesn't handle
+<tt>XSync</tt> correctly. You can turn around using: 
+<tt>-buffer 2</tt> option.
+This is for DECstation, RISC6000, Tektronix and many others.
+
+<li>
+DIRTY POINT on screen because some X servers don't draw the same pixels
+for the same segment. You can turn around using: 
+<tt>-clearline 0</tt> or <tt>-linewidth 1</tt> options.
+
+<li>
+FOCUS WINDOW doesn't work with OpenWin, so put the cursor in the game window
+to play. To pause the game you must use key `p'.
+
+<li>
+DEMO mode seems to cheat (blocs going through other blocs) but
+it is because the visualization show a direct way (it sums
+all the transformations up).
+In fact, the real way could use very complex and tortuous indirect path.
+
+<li>
+The program doesn't read <tt>XENVIRONMENT</tt> file.
+
+</ul>
+
+<p>
+Bugs on old systems:
+<p>
+
+<ul type="circle">
+<li> On HP9000/835/CHX problems with Tile.
+<li> On HPUX7.0 a /bin/sh bug kills <tt>configure</tt> script if you create it
+  with <tt>autoconf</tt> command.
+  To turn around : Delete comments (in configure) line 2 to 6 after the last 
+		   "cat &lt;&lt;EOF &gt;config.status"
+<li> On Tektronix XP terminal, some pixel from void are drawn before some
+  text of menu button.... It's a Tektronix BUG!!!!! (they corrected it)
+</ul>
+
+</blockquote>
+
+<h2><a name="STA">Statistics</a></h2>
+
+<blockquote>
+
+Speed depends on your display's hardware!
+<p>
+The fastest buffer mode is not the same on every display.
+Some buffer modes are unusable (0) or ugly (4,5).
+The buffer modes 1 and 2 are perfect on any screen.
+The buffer mode 3 is display dependent.
+<p>
+Results are obtained by: <tt>make speedtest</tt>
+Empty case if NA buffering mode.
+Speeds are in frames by second.
+Speeds &gt;100 are <i>very approximate</i>.
+<p>
+
+<h3><a name="TAB">Speed table</a></h3>
+<blockquote>
+<pre class="listing">+----------+-----------------------+-------------------+-----------------------+
+|          |            drawmode=0 (wireframe)         | drawmode=2 (faces)    |
+|          +-----------------------+-------------------+-----------------------+
+|          |     clearline=0       |   clearline=1     |                       |
++----+-----+-----------------------+-------------------+-----------------------+
+|CPU |DISPL| 0   1   2   3   4   5 | 1   2   3   4   5 | 0   1   2   3   4   5 |
++----+-----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+|486 |486  |  6|   | 18|   |   | 17|   | 13|   |   | 13|  5|   | 14|   |   | 13|
+|586 |586  | 76| 30|166| 55| 76|250| 31|111|125|250|125| 43| 26| 90| 37| 43| 62|
+|715a|715a |333|333|250|500|100|500|250|100|333|100|100|142| 52| 52|166|200|166|
+|710a|710a |166|125|125|166|500|200|125| 50|166|333| 62|100|  6|  4|100|142|100|
+|715a|T330 |166|100|111| 43|250|166|142| 43| 43|250| 83| 14| 12| 13| 15| 15| 15|
+|Indy|Indy |166|100| 52|250|250|142|111| 66|250|250| 90|111| 62| 40|125|125| 90|
+|sun4|sun4 | 43|   |142|   |   |200|   | 55|   |   | 62| 28|   | 55|   |   | 55|
+|Sun4|Sun4 |125| 90| 76|100|250|142|111| 62| 83|333| 83| 90| 38| 34| 66|200|100|
+|SUn4|SUn4 |142|100| 83| 62|333|142|125| 66|111|333| 83|111| 37| 34| 66|250|111|
+|R600|R600 |142| 43| 43|166|333| 52| 45| 27|142|250| 23| 76| 12| 12| 90|125| 43|
+|Digo|Digo |142|142|111|333|333|250|200|100|500|500| 66|125|100| 76|250|250|142|
+|Dec5|Dec5 | 50| 62| 90| 37| 58|125| 55| 55| 76|250| 76| 33| 40| 38| 22| 37| 58|
++----+-----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+</pre>
+</blockquote>
+
+<h3><a name="WOR">List of tested workstation</a></h3>
+
+<blockquote>
+<pre class="listing">486:  CPU HARDWARE = 486SX25 w/o FPA
+      VIDEO CARD   = VGA 65530
+      SYSTEM       = LINUX 0.99pl9 (SLS 1.02)
+      X SERVER     = XFree386 1.2, VGA2 generic, non-banked
+      COMPILER     = GCC 2.3.3 with -O2 option
+      NOTES	   = Needs ``-clearline 0'' option
+586:  CPU HARDWARE = Pentium 90
+      VIDEO CARD   = SVGA PCICL5434
+      SYSTEM       = LINUX 1.1.73
+      X SERVER     = XFree386 3.1, SVGA clgd5434, 8 planes
+      COMPILER     = GCC 2.5.8 with -O2 option
+      NOTES	   = Bug in colormap switching, don't use buffer=3
+715a: CPU HARDWARE = HP9000/715/75
+      VIDEO CARD   = CRX
+      SYSTEM       = HPUX 9.03
+      X SERVER     = 24planes (using 8)
+      COMPILER     = cc
+710a: CPU HARDWARE = HP9000/710/50
+      SYSTEM       = HPUX 8.07
+      X SERVER     = 8planes
+      COMPILER     = cc
+Indy: CPU_HARDWARE = INDY, IP22 mips
+      SYSTEM	   = IRIX 5.2
+      X SERVER	   = 8planes
+      COMPILER	   = cc
+      NOTES	   = Needs ``-clearline 0'' option
+Digo: CPU_HARDWARE = INDIGO 2 IP22 mips
+      SYSTEM	   = IRIX 5.2
+      X SERVER	   = 24planes (using 8)
+      COMPILER	   = cc
+      NOTES	   = Needs ``-clearline 0'' option
+sun4: CPU_HARDWARE = SPARC2 (sun4c)
+      SYSTEM	   = SunOS 4.1.2.2
+      X SERVER	   = 1plane
+      COMPILER	   = cc
+Sun4: as "sun4"
+      X SERVER	   = 8planes
+SUn4: as "Sun4"
+      COMPILER	   = cc -O
+R600: CPU HARDWARE = RISC 6000 (uname -a gave: 000004153000)
+      SYSTEM       = AIX 3.2 
+      X SERVER     = 8planes
+      COMPILER     = cc
+Dec5: CPU_HARDWARE = DEC station 5000/200
+      SYSTEM	   = ULTRIX 4.4.0
+      X SERVER	   = 8planes
+      COMPILER	   = cc
+      NOTES	   = Needs ``-clearline 0'' option
+</pre>
+
+</blockquote>
+
+<h3><a name="XTE">List of tested X terminals</a></h3>
+
+<blockquote>
+<pre class="listing">T330: X SERVER     = 8 planes, Tektronix XP330 Version: 6.0.0
+</pre>
+</blockquote>
+</blockquote>
+
+
+
+<h3><a name="TOD">TODO list</a></h3>
+
+<blockquote>
+
+Some generic question or goal:
+<p>
+
+<ul type="circle">
+<li> Why there is problems with XFREE VGA16 on LINUX for drawing polygon on pixmap?
+<li> Why on 1 LINUX system XTranslateGeometry kill the twm and fvwm?
+<li> With OpenWin: find how to receive the focus event.
+<li> Find how to receive the destroy window event.
+<li> A best Sound (with <tt>rplay</tt> or another standard).
+<li> Add a key as `space' but pushing piece only one level.
+</ul>
+
+<p>
+For the future versions:
+<p>
+
+<ul type="circle">
+<li>   For version 2.0: Obstacles.
+<li>   For version 3.0: Two players extension.
+</ul>
+</blockquote>
+
+
+<h2><a name="CHA">Changes history</a></h2>
+
+<blockquote>
+<pre class="listing">0.0 --&gt; 0.1
+	Uses only 4 planes for buffering=1 option.
+	Color Legend.
+	A little bit of sound.
+	Displays next piece.
+0.1 --&gt; 0.2
+	Best choice of the grey level.
+	Changing piece type doesn't change world size.
+	Possibility to change font.
+	Displays the zoo, and adds some missing pieces.
+	Options to see score and zoo.
+	Displays frame/second number.
+	Uses ``autoconf'' to create ``configure''
+	Accelerates line block moving, clearing the block by redrawing line.
+	Adds various buffering mode.
+	buffer=-1 mode for automatic choice.
+	Uses less plane for black and white option.
+	Adds a button to choose keyboard.
+	3D buttons and background color choice.
+	Uses Keypad on Sun.
+0.2 --&gt; 0.2a
+	Only bug correction:
+		Uses a STDLIB_H define to include &lt;stdlib.h&gt;
+		Doesn't core dump if copyright file isn't install.
+		Checks if fonts can be loaded.
+0.2a --&gt; 0.2b	
+	For score table, tries to get name with:
+		getlogin,cuserid,getenv("LOGNAME"),getenv("USER")
+	Checks if default font can be loaded.
+	Error message if ``lockf'' fails.
+	Debug ``-display'' and ``-geometry'' options.
+	Adds ``shar'' goal in ``Makefile.in''
+0.2b --&gt; 0.2c
+	Doesn't use "lockf" if F_LOCK is not defined.
+	Uses "xmkmf" or "imake" informations if they exist.
+0.2c --&gt; 0.2d
+	Adds man pages.
+	Doesn't stop game after one play if score directory isn't installed
+0.2d --&gt; 0.2e
+	Now works on: Grayscale,StaticGray,StaticColor,TrueColor,
+	On DirectColor: displays in black and white.
+	Modified defaults options ("Xbl.ad") to increase portability and speed
+	Improved scoring method (Fibonacci function of level)
+0.2e --&gt; 0.2f
+	New menu window with real three D buttons
+	The zoo only shows possible piece (FLAT,COMPLEX,PIECE)
+	The iconify button is now taken into account.
+0.2f --&gt; 0.2g
+	The BELL is reset after each game sound.
+	Speed test for help choosing the good buffer mode added.
+	Only uses GCFunction=GXCopy: it's 10 times faster than other.....
+0.2g --&gt; 0.2h
+	Removes some LINT errors
+	Creates "Xbl.iafa"
+	Displays an "Xbl message" on X11 error (for the BadAlloc)
+		and explains how to use less X11 memory.
+	Computes minimum "select" time. But this was cancelled (bad idea)
+	The "cancel key" is ^] and not ^[, some keyboards have an ESC key
+	near the game key... it's terrible to cancel a good game...
+0.2h --&gt; 0.2i
+	Adds message on game window: "To start or resume game....."
+	Ports to LINUX(SLS, 486SX25 w/o FPA), removes GCC -Wall warnings
+	You can now use Cursor key to translate block.
+	Changes the rotation display, they are now much prettier.
+	Now takes resource "font".
+	Adds the -1 value for button height (font dependent)
+	Reduces DRASTICALLY the number of floating point operations.
+	Adds the "spatial" buttons.
+	Adds options -zoogeometry -menugeometry -scoregeometry
+	Gives the current command line to the Window Manager (with all options)
+	Able to display on non-default screen.
+	Displays score in the game window title.
+	Removes all keypress in the input queue when a new game start
+	Removes a nice bug! When you continuously stroke "space" key the block
+	   floated over the floor!!!!!
+	Max size for menu and score window and fixed ratio for zoo window
+0.2i --&gt; 0.2j
+	New help with the picture of a cube
+0.2j --&gt; 0.2k
+	Adds linewidth option.
+	Adds demo mode.
+	Now works on a visual with a number of color cells not a power of 2
+	Correct the search of a best visual, it now work....  see BUGS
+0.2k --&gt; 1.0
+	TIME_TO_DEMO is now an option
+	Remove a bug in options scanning
+	Add iso8859 for the fonts
+	Add "sys/select.h" detection for AIX
+1.0  --&gt; 1.0a
+	Remove some warning.
+	Bug found by martin@oc2.oc.chemie.th-darmstadt.de (Martin Kroeker)
+		The "setargs" function crash the game &amp; window manager
+1.0a --&gt; 1.0b
+	Look the value returned by "XrmGetResource" not the pointer value.
+	Turn around a bug in "menu.c" who need to be corrected (LINUX)
+	No more core-dump on Berkeley system if DISPLAY isn't set
+		Bug found by Ken-Ju Jung &lt;kjung@decster.uta.edu&gt;
+1.0b --&gt; 1.0c
+	The option abbreviation are no more valid (option.c)
+		Bug found by Harro Kremer &lt;kremer@cs.utwente.nl&gt;
+1.0c --&gt; 1.0d
+	Remove all lint warnings (Silicon's lint is the best)
+	Remove "gcc -Wall" warning except those for "printf" format
+	Now the -colormap option really works!!!
+	In the makefile, "\"" make an error on few "csh", remove it.
+1.0d --&gt; 1.0e
+	Only a complet documentation change: use HTML file.
+1.0e --&gt; 1.0f (1995/03/06)
+	Remove an INSTALLATION bug, due to coexisting release of X11.
+	reuben@rutcor.rutgers.edu (Reuben J. Settergren).
+1.0f --&gt; 1.0g
+	Small enhancement in documentation.
+	"configure" is now executed with "/bin/sh"
+1.0g --&gt; 1.0h
+        Keyboard decoding is rewrote to consider the case where
+        XK_KP_Left is named XK_Left (and the other cursor keys)
+1.0h --&gt; 1.0i (1998/09/01)
+	Problem with space in font name corrected. Thanks to Richard Skelton
+1.0i --&gt; 1.0j (2001/03/19)
+        Add the trademark on Blockout
+1.0j --&gt; 1.0k (2001/12/10)
+        Fix a missing block shape and a duplicate one. Thanks to Nerius Landys
+        Some installation process enhancement.
+	The default group install is the GID of "games".
+        Realtime: less bugs, nicer, use less CPU, choose FPS.
+        Stereovision (You cross the eyes to see in 3D)
+        Small delay before the start of a new game.
+1.0k --&gt; 1.1 (2003/07/02)
+        Source maintenance:
+	      Apply the patch from the Debian package
+	      Convert to ANSI C and indent sources.
+	      Update contact information.
+	Bugs:
+	      Apply a buffer overflow fix. Thanks to Steve Kemp/Joey Hess.
+	      Other portability patches from Petr Mladek.
+	      The zoo display now works (bug introduced in 1.0k)
+	      A game-window size problem with 'fvwm2'
+	New features:
+	      New game key : '0' to drop the bloc one level.
+1.1  --&gt; 1.1.1 (2003/07/16)
+        Some buffer overflow fixes.
+	If a global score file can't be made, a user one is created.
+	Xbl no more freeze after the first game with some libc version.
+1.1.1--&gt; 1.1.2 (2003/09/01)
+	Use user score file if Xbl is not executed with the GID "games".
+	Replace "getlogin" by "geteuid". Thanks to Ivan Shmakov
+	Add a python script to change the version number in the sources.
+	Remove copyright notice from game window.
+1.1.2 -&gt; 1.1.3
+        xbl-man.html is now standard HTML. Thanks to Dirk Eberhardt.
+	Xbl works now on AMD64. Thanks to Sander Brandenburg.
+1.1.3 -&gt; 1.1.4
+        Remove a string formatting warning.
+        Fixed the 'next piece' position (uninitialized variable)
+1.1.4 -&gt; 1.1.5 (2006/01/28)
+        Add missing bloc: <tt>rrldb</tt> (thanks to N.Landys and M.Banguerski)
+1.1.5 -&gt; 1.1.6 (2009/02/14)
+        Change the default font definition for NetBSD and Gentoo
+</pre>
+</blockquote>
+
+
+<h2><a name="THA">Thanks</a></h2>
+
+<blockquote>
+<a href="http://www710.univ-lyon1.fr/%7Eexco">I</a>
+ thank all the people who gave me ideas, help, bugs:
+<blockquote>
+<address>Thomas Chaboud</address>
+<address>Jamie Zawinski</address>
+<address>Mike Hojnowski</address>
+<address>Leung Chung Shing Anderson</address>
+<address>Dave Lemke</address>
+<address>Nerius Landys</address>
+</blockquote>
+And many others.
+</blockquote>
+Blockout is a registered trademark of <a href="http://www.gamepuzzles.com/">Kadon Enterprises</a>, Inc., used by permission. 
+
+
+
+</body></html>

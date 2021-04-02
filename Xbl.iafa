@@ -1,0 +1,27 @@
+Package-Name:		xbl-1.1.6.tar.gz
+Title:			xbl: an X blockout game (3d Tetris)
+Version:		1.1.6
+Description:		An interactive 3D game that is
+			a good training tool to understand 3D rotations.
+    			You need reflex and memory (human). 
+			The game world is a 3D discrete space.
+			The player has a top view of this discrete space.
+			Blocks fall inside the discrete space,
+			and stop when hitting the floor or another block.
+			If a discrete space level is full, it is destroyed.
+			Another block appears (only one moving block at a time).
+			Player can move or rotate blocks in real time.
+			The goal is to play as long as possible.
+
+                        Blockout is a registered trademark of Kadon
+                        Enterprises, Inc., used by permission.
+                        http://www.gamepuzzles.com
+Abstract:		A realtime 3D interactive game of pieces packing.
+Author:			Thierry EXCOFFIER
+Author-Email:		Thierry.EXCOFFIER@liris.univ-lyon1.fr
+Maintained-At:		http://www710.univ-lyon1.fr/~exco/XBL
+Distribution-Type:	Source, C language
+Restrictions:		UNIX, X11
+Copying-Policy:		Freely Redistributable, Copyright held by author.
+Modified-by:		Thierry EXCOFFIER 7 November 2005
+Keywords:		game, 3D, X11, block, realtime

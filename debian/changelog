@@ -1,3 +1,9 @@
+xbl (1.1.6-1~focal2) focal; urgency=medium
+
+  * Add link to VCS. Add patch to set a WM class on windows so that they can have dock icons.
+
+ -- Adrianna Pińska <adrianna.pinska@gmail.com>  Fri, 02 Apr 2021 22:38:25 +0200
+
 xbl (1.1.6-1~focal1) focal; urgency=low
 
   * Rebuilt from latest upstream and a fresh debian directory, incorporating parts of the old Debian package.

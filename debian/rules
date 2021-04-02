@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	MAKELEVEL=0 dh_auto_configure --
+
+override_dh_auto_build:
+	dh_auto_build -- SCOREDIR=/var/games/xbl
+
+override_dh_installdirs:
+	dh_installdirs usr/games var/games/xbl etc/X11/app-defaults
+
+override_dh_auto_install:
+	install -s bl debian/xbl/usr/games/xbl
+	install -m 644 Xbl.ad debian/xbl/etc/X11/app-defaults/Xbl
+
+override_dh_installdocs:
+	dh_installdocs xbl-README *.gif *.html
+
+override_dh_installman:
+	dh_installman xbl.man
+
+override_dh_fixperms:
+	dh_fixperms
+	chown root.games debian/xbl/var/games/xbl
+	chmod g+rws debian/xbl/var/games/xbl

@@ -1,0 +1,5 @@
+xbl for Debian
+
+This game was originally packaged for Debian by Joey Hess from 1996 to 2003, but that package was removed from Debian and Ubuntu around 2005. I have repackaged this using the latest upstream source and some elements of the original package, with updated dependencies and without legacy hacks.
+
+ -- Adrianna Pińska <adrianna.pinska@gmail.com>  Thu, 01 Apr 2021 18:54:18 +0200

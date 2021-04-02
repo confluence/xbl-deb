@@ -1,0 +1,14 @@
+Source: xbl
+Section: games
+Priority: optional
+Maintainer: Adrianna Pińska <adrianna.pinska@gmail.com>
+Build-Depends: debhelper-compat (= 12), xutils-dev, libx11-dev, libxext-dev
+Standards-Version: 4.1.4
+Homepage: http://perso.univ-lyon1.fr/thierry.excoffier/XBL/
+
+Package: xbl
+Architecture: any
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: 3D tetris-like game
+ XBlockOut is a block-dropping game in three dimensions.

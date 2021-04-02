@@ -1,0 +1,5 @@
+xbl (1.1.6-1~ppa1) unstable; urgency=low
+
+  * Rebuilt from latest upstream and a fresh debian directory, incorporating parts of the old Debian package.
+
+ -- Adrianna Pińska <adrianna.pinska@gmail.com>  Thu, 01 Apr 2021 18:54:18 +0200

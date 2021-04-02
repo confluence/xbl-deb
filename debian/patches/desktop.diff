@@ -1,0 +1,15 @@
+Add a desktop file.
+Index: xbl-1.1.6/xbl.desktop
+===================================================================
+--- /dev/null
++++ xbl-1.1.6/xbl.desktop
+@@ -0,0 +1,9 @@
++[Desktop Entry]
++Type=Application
++Name=XBlockOut
++Comment=3D tetris-like game
++Icon=xbl
++Exec=xbl
++Terminal=false
++Categories=Game;BlocksGame;
++Keywords=tetris;blocks;logic;

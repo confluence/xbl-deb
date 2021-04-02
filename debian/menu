@@ -1,0 +1,2 @@
+?package(xbl):needs=x11 section=Games/Tetris-like title=Blockout \
+	command=/usr/games/xbl

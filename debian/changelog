@@ -1,0 +1,234 @@
+xbl (1.1.6-1~focal1) focal; urgency=low
+
+  * Rebuilt from latest upstream and a fresh debian directory, incorporating parts of the old Debian package.
+
+ -- Adrianna Pińska <adrianna.pinska@gmail.com>  Thu, 01 Apr 2021 18:54:18 +0200
+
+xbl (1.1.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Joey Hess <joeyh@debian.org>  Mon,  1 Sep 2003 08:42:24 -0400
+
+xbl (1.1.1-1) unstable; urgency=low
+
+  * New upstream release which can use per-user score files, instead of a
+    global file. So the program need not be setuid. Added to NEWS.Debian and
+    README.Debian explaining how the transition will work.
+  * Slight modification to upstream: detect if it's setgid games and if so use
+    the old file.
+  * Remove global score files on purge.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 19 Jul 2003 10:19:27 +0200
+
+xbl (1.1-1) unstable; urgency=low
+
+  * New upstream release with security fixes and portability fixes.
+    My diff is much smaller now.
+  * Brought most recent security fixes forward.
+
+ -- Joey Hess <joeyh@debian.org>  Tue,  8 Jul 2003 11:29:12 -0400
+
+xbl (1.0k-6) unstable; urgency=HIGH
+
+  * Fixed another buffer overflow, in processing of the -display option.
+    (Found by auto94042@hushmail.com).
+  * Also fixed overflow in DISPLAY processing, and in processing of several
+    other options.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 29 Jun 2003 21:56:52 -0400
+
+xbl (1.0k-5) unstable; urgency=HIGH
+
+  * Applied a patch from Steve Kemp <skx@tardis.ed.ac.uk> to prevent a buffer
+    overflow in the use of the XBLOPTIONS environment variable. Possibly
+    exploitable to get at group games. Closes: #16952
+  * Fixed all the strcat's into allargs from XrmGetResource, which allow
+    for similar overflows too, probably.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 17 Nov 2002 19:34:27 -0500
+
+xbl (1.0k-4) unstable; urgency=low
+
+  * Debhelper v4.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 16 Nov 2002 22:12:55 -0500
+
+xbl (1.0k-3) unstable; urgency=low
+
+  * Globally change the Rxx macros to xbl_Rxx, since they conflicted with
+    (badly named) registers in an enum in a system header file on arm. The
+    macros are really useless for modern C, and I could have just removed
+    them, but this is a simple to maintain substitution:
+       perl -i.bak -pe 's/R([0-9]+\()/xbl_R$1/g' *
+    Closes: #129169
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 14 Jan 2002 12:11:18 -0500
+
+xbl (1.0k-2) unstable; urgency=low
+
+  * Build-depend on xutils, because xmkmf is needed. Closes: #127177
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 31 Dec 2001 16:23:59 -0500
+
+xbl (1.0k-1) unstable; urgency=low
+
+  * New upstream version, requiring some horrendous hacks to work. Blah.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 28 Dec 2001 23:02:03 -0500
+
+xbl (1.0j-2) unstable; urgency=low
+
+  * removed dwww entry and went to doc-base.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 14 Oct 2001 02:20:40 -0400
+
+xbl (1.0j-1) unstable; urgency=low
+
+  * New upstream.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 25 May 2001 20:54:30 -0400
+
+xbl (1.0i-9) unstable; urgency=low
+
+  * Took back maintainence, at least until Neil comes back. Closes: #92475
+  * Accepted Branden's NMU, Closes: #86300, #87851
+  * Moved high score to /var/games, Closes: #92516
+  * debhelper v3
+
+ -- Joey Hess <joeyh@debian.org>  Tue,  3 Apr 2001 12:32:59 -0700
+
+xbl (1.0i-8.1) unstable; urgency=low
+
+  * NMU
+  * debian/control:
+    - updated Build-Depends (xlib6g-dev -> xlibs-dev)
+    - bumped Standards-Version to 3.5.2
+    - revised extended description
+  * debian/rules:
+    - install app-defaults file to /etc/X11 and register it as a conffile
+      (Closes: #86300)
+    - remove call to dh_suidregister
+
+ -- Branden Robinson <branden@debian.org>  Fri, 16 Mar 2001 19:42:56 -0500
+
+xbl (1.0i-8) frozen unstable; urgency=low
+
+  * Taken over maintenance
+  * Uploaded to sponsor
+
+ -- Neil Hunt <grover@huntcorp.cx>  Wed, 23 Aug 2000 13:40:40 +0800
+
+xbl (1.0i-7) frozen unstable; urgency=low
+
+  * Corrected score directory location. Closes: #59190
+  * This should probably go into frozen.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 28 Feb 2000 13:52:24 -0800
+
+xbl (1.0i-6) unstable; urgency=low
+
+  * Build deps.
+
+ -- Joey Hess <joeyh@debian.org>  Sat,  4 Dec 1999 17:54:36 -0800
+
+xbl (1.0i-5) unstable; urgency=low
+
+  * A bug in my build system caused an upload of a non-orig .tar.gz.
+    Reupload full source.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 30 Sep 1999 14:56:15 -0700
+
+xbl (1.0i-4) unstable; urgency=low
+
+  * Modified to use new-style va_arg's, instead of the 10 year old type it
+    was using. Closes: #44615.
+  * I had to do a really nasty thing in there, because of ansi C's
+    prohibition of functions with no static arguments, just variadic args.
+    See the code for the hack.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 10 Sep 1999 16:22:13 -0700
+
+xbl (1.0i-3) unstable; urgency=low
+
+  * FHS
+
+ -- Joey Hess <joeyh@debian.org>  Mon,  6 Sep 1999 18:24:23 -0700
+
+xbl (1.0i-2) unstable; urgency=low
+
+  * Rebuilt with latest debhelper to change how sgid binary is registered.
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 27 Oct 1998 22:20:48 -0800
+
+xbl (1.0i-1) unstable; urgency=low
+
+  * New upstream release.
+  * Included html docs now.
+
+ -- Joey Hess <joeyh@debian.org>  Mon,  7 Sep 1998 14:04:43 -0700
+
+xbl (1.0h-3) frozen unstable; urgency=low
+
+  * Move to /usr/games to conform with newest policy.
+  * Install man page in section 6 (not 1), and in /usr/man, not
+    /usr/X11R6/man.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 15 Apr 1998 00:03:14 -0700
+
+xbl (1.0h-2) unstable; urgency=low
+
+  * Updated standards-version and fsf mailing address.
+
+ -- Joey Hess <joeyh@debian.org>  Mon,  9 Feb 1998 14:39:13 -0800
+
+xbl (1.0h-1) unstable; urgency=low
+
+  * New upstream release with pristine source.
+  * Use debhelper.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 24 Nov 1997 15:37:27 -0500
+
+xbl (1.0f-6) unstable; urgency=low
+
+  * Libc6.
+  * New menu format.
+  * Routine update of debian/rules:
+    Fixed binary-indep target.
+
+ -- Joey Hess <joeyh@debian.org>  Mon,  8 Sep 1997 19:42:42 -0400
+
+xbl (1.0f-5) unstable; urgency=low
+
+  * Open a pipe to "zcat GPL.gz" to read copyright file. (#6217)
+  * Fixed permissions on score directory. (#6217)
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 29 Dec 1996 13:46:22 -0500
+
+xbl (1.0f-4) unstable; urgency=low
+
+  * Added a menu-file.
+  * Routine update of debian/rules:
+    Use debmake
+    New email address.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 21 Dec 1996 00:10:30 -0500
+
+xbl (1.0f-3) unstable; urgency=low
+
+  * Fixed permissions of manpage and app-defaults file.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 17 Oct 1996 01:54:04 -0400
+
+xbl (1.0f-2) unstable; urgency=low
+
+  * Routine update of debian/rules.
+  * Now registers itself with install-fvwm2menu.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 6 Oct 1996 14:58:02 -0400
+
+xbl (1.0f-1) unstable; urgency=low
+
+  * First release.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 16 Sep 1996 19:25:56 -0400

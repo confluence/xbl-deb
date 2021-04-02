@@ -1,0 +1,69 @@
+Set WM_CLASS on the windows so that icons will work in the dock.
+Index: xbl-1.1.6/initmenu.c
+===================================================================
+--- xbl-1.1.6.orig/initmenu.c
++++ xbl-1.1.6/initmenu.c
+@@ -266,6 +266,7 @@ void initzoo(struct menu *m, struct opt
+   XSizeHints sh ;
+   char buf[LINE_LENGTH] ; /* For window name */
+   int xx,yy ;
++  XClassHint ch;
+ 
+   m->yzoo = ZOO_WIDTH ;
+   m->xzoo = (m->yzoo*ZOO_NBX_PIECES)/ZOO_NBY_PIECES ;
+@@ -309,6 +310,10 @@ void initzoo(struct menu *m, struct opt
+   sh.y = yy ;
+   XSetWMNormalHints( x->display,m->zoo,&sh ) ;
+ 
++  ch.res_name = "XBlockOut";
++  ch.res_class = "xbl";
++  XSetClassHint(x->display, m->zoo, &ch);
++
+   if ( m->showzoo )
+     {
+       m->showzoo = 0 ;
+@@ -326,6 +331,7 @@ void initmenuwindow(struct menu *m, stru
+   int xx,yy ;
+   unsigned int odxmax,odymax ;
+   XSizeHints sh ;
++  XClassHint ch;
+ 
+   wa.event_mask = ButtonPressMask|ButtonReleaseMask|ExposureMask|StructureNotifyMask ;
+   wmask = CWEventMask|CWBackPixel ;
+@@ -368,6 +374,10 @@ void initmenuwindow(struct menu *m, stru
+   sh.y = yy ;
+   XSetWMNormalHints( x->display,m->window,&sh ) ;
+ 
++  ch.res_name = "XBlockOut";
++  ch.res_class = "xbl";
++  XSetClassHint(x->display, m->window, &ch);
++
+   /* If speedtest : no window menu */
+   if ( opt->speedtest==0 ) XMapWindow( x->display,m->window) ;
+ }
+Index: xbl-1.1.6/initwin.c
+===================================================================
+--- xbl-1.1.6.orig/initwin.c
++++ xbl-1.1.6/initwin.c
+@@ -207,6 +207,7 @@ void setargs(struct bl *bl)
+   XTextProperty tp,tp2 ;
+   XWMHints wh ;
+   Window w,root,father,*childrens[1] ;
++  XClassHint ch;
+ 
+   i = 0 ;
+   pc = tt ;
+@@ -301,9 +302,12 @@ void setargs(struct bl *bl)
+   wh.flags = IconPixmapHint ;
+   wh.icon_pixmap = bl->x.icone ;
+ 
++  ch.res_name = "XBlockOut";
++  ch.res_class = "xbl";
++
+   XSetWMProperties(bl->x.display,bl->x.window,&tp,&tp2,
+ 		   argv,i,
+-		   NULL,&wh,NULL ) ;
++		   NULL,&wh,&ch ) ;
+   /*
+     { int j ; for(j=0;j<i;j++) printf("%s ",argv[j]) ; printf("\n") ; }
+   */

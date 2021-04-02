@@ -1,3 +1,9 @@
+xbl (1.1.6-1~bionic3) bionic; urgency=low
+
+  * Also set a WM class on the high score window.
+
+ -- Adrianna Pińska <adrianna.pinska@gmail.com>  Sat, 03 Apr 2021 00:08:44 +0200
+
 xbl (1.1.6-1~bionic2) bionic; urgency=low
 
   * Add link to VCS. Add patch to set a WM class on windows so that they can have dock icons.

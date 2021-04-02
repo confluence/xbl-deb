@@ -5,6 +5,8 @@ Maintainer: Adrianna Pińska <adrianna.pinska@gmail.com>
 Build-Depends: debhelper-compat (= 12), xutils-dev, libx11-dev, libxext-dev
 Standards-Version: 4.1.4
 Homepage: http://perso.univ-lyon1.fr/thierry.excoffier/XBL/
+Vcs-Browser: https://github.com/confluence/xbl-deb
+Vcs-Git: https://github.com/confluence/xbl-deb.git
 
 Package: xbl
 Architecture: any
